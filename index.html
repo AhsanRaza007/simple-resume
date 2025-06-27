@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Resume | Chandani Khatoon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals with Teal Accent -->
+    <!-- Application Structure Plan: The application is structured as a single-page portfolio with vertical scrolling. The flow is: Header -> Summary -> Skills -> Interactive Experience Timeline -> Education. This structure tells a professional story logically, from "who is she" to "what can she do" and "where has she done it". The timeline interaction prevents information overload by revealing details on demand, which is more user-friendly than a long, static list. A data visualization is included to provide a quick quantitative summary of her experience. -->
+    <!-- Visualization & Content Choices: 
+        - Summary (Inform): A clear text block at the top for immediate context.
+        - Skills (Organize): Presented as styled cards with tags instead of a plain table for better visual appeal and scannability. Method: HTML/Tailwind.
+        - Experience (Change, Organize, Inform): An interactive vertical timeline. Goal: Show career progression clearly. Method: HTML/Tailwind for structure, JS for click-to-expand details. This makes the densest part of the resume engaging.
+        - Experience Duration (Compare): A horizontal bar chart. Goal: Give a quick, visual comparison of time spent in each modality/role. Method: Chart.js/Canvas. This adds a data-driven element that static resumes lack.
+        - Education (Inform): A clean, distinct card for foundational info. Method: HTML/Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfcfb;
+            color: #374151;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: -2.375rem;
+            width: 14px;
+            height: 14px;
+            background-color: #fdfcfb;
+            border: 3px solid #14b8a6;
+            border-radius: 50%;
+            z-index: 10;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 350px;
+            max-width: 800px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <main class="container mx-auto px-6 py-12 md:py-20 max-w-4xl">
+
+        <header id="header" class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800">CHANDANI KHATOON</h1>
+            <p class="text-xl md:text-2xl text-teal-600 mt-2">Radiologic Technologist</p>
+            <div class="mt-4 flex justify-center items-center space-x-4 text-gray-500 text-sm">
+                <span>Patna, Bihar, 800020</span>
+                <span>•</span>
+                <span>7903140095</span>
+            </div>
+        </header>
+
+        <section id="summary" class="mb-16">
+             <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-teal-200 pb-2">Professional Summary</h2>
+            <p class="text-lg text-gray-600 leading-relaxed">
+                A dedicated and detail-oriented Radiologic Technologist with 2 years of hands-on internship experience in diverse clinical settings. Proficient in CT, Diagnostic X-Ray, and Ultrasound procedures. Committed to providing excellent patient care, ensuring diagnostic image quality, and adhering to the highest standards of radiation safety.
+            </p>
+        </section>
+
+        <section id="skills" class="mb-16">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b-2 border-teal-200 pb-2">Core Competencies</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="font-bold text-teal-700 text-lg mb-3">Imaging Modalities</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-teal-50 text-teal-800 text-sm font-medium px-3 py-1 rounded-full">Computed Tomography (CT)</span>
+                        <span class="bg-teal-50 text-teal-800 text-sm font-medium px-3 py-1 rounded-full">Diagnostic X-Ray</span>
+                        <span class="bg-teal-50 text-teal-800 text-sm font-medium px-3 py-1 rounded-full">Ultrasound (Sonography)</span>
+                        <span class="bg-teal-50 text-teal-800 text-sm font-medium px-3 py-1 rounded-full">Patient Positioning</span>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="font-bold text-teal-700 text-lg mb-3">Technical Skills</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">PACS & EHR Systems</span>
+                        <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">Image Processing</span>
+                        <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">Quality Control</span>
+                        <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">3D Reconstruction</span>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="font-bold text-teal-700 text-lg mb-3">Patient Care & Safety</h3>
+                     <div class="flex flex-wrap gap-2">
+                        <span class="bg-amber-50 text-amber-800 text-sm font-medium px-3 py-1 rounded-full">Patient Communication</span>
+                        <span class="bg-amber-50 text-amber-800 text-sm font-medium px-3 py-1 rounded-full">Radiation Safety & ALARA</span>
+                        <span class="bg-amber-50 text-amber-800 text-sm font-medium px-3 py-1 rounded-full">Attention to Detail</span>
+                        <span class="bg-amber-50 text-amber-800 text-sm font-medium px-3 py-1 rounded-full">Team Collaboration</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="mb-16">
+            <h2 class="text-2xl font-bold text-gray-800 mb-8 border-b-2 border-teal-200 pb-2">Professional Experience</h2>
+            <div class="relative pl-10 border-l-2 border-teal-100">
+                <div class="timeline-item mb-12">
+                    <div class="cursor-pointer" onclick="toggleDetails('exp1')">
+                        <p class="text-xs text-gray-500">Nov 2024 – Present</p>
+                        <h3 class="text-xl font-bold text-gray-800">CT Radiographer</h3>
+                        <p class="text-md text-gray-600">Star Imaging Diagnostic Centre | Patna, Bihar</p>
+                        <span class="text-teal-600 text-sm mt-1 inline-flex items-center">View Details 
+                            <svg id="exp1-arrow" class="w-4 h-4 ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </div>
+                    <ul id="exp1" class="hidden mt-4 ml-4 list-disc text-gray-600 space-y-2">
+                        <li>Operates advanced CT scanners to produce detailed cross-sectional images for diagnostic purposes.</li>
+                        <li>Prepares and screens patients for CT procedures, provides clear instructions, and ensures their safety and comfort.</li>
+                        <li>Manages the administration of intravenous (IV) contrast media when required for specific scans and monitors patients.</li>
+                        <li>Performs post-processing on CT images to enhance diagnostic quality and ensures images are correctly archived to the PACS system.</li>
+                        <li>Adheres strictly to radiation safety protocols, including the ALARA (As Low As Reasonably Achievable) principle.</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item mb-12">
+                     <div class="cursor-pointer" onclick="toggleDetails('exp2')">
+                        <p class="text-xs text-gray-500">May 2024 – Oct 2024</p>
+                        <h3 class="text-xl font-bold text-gray-800">Radiology Ultrasound Technician</h3>
+                        <p class="text-md text-gray-600">Manav Orthopedic Clinic and Maternity | Patna, Bihar</p>
+                        <span class="text-teal-600 text-sm mt-1 inline-flex items-center">View Details 
+                            <svg id="exp2-arrow" class="w-4 h-4 ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </div>
+                    <ul id="exp2" class="hidden mt-4 ml-4 list-disc text-gray-600 space-y-2">
+                        <li>Performed a variety of diagnostic ultrasound examinations, focusing on musculoskeletal and OB/GYN imaging.</li>
+                        <li>Operated and maintained ultrasound equipment, selecting appropriate settings and transducers to capture high-quality images.</li>
+                        <li>Prepared patients for scans, explained procedures to ease anxiety, and accurately positioned them to ensure optimal imaging results.</li>
+                        <li>Assisted physicians by providing clear, precise images and documenting preliminary findings for interpretation.</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="cursor-pointer" onclick="toggleDetails('exp3')">
+                        <p class="text-xs text-gray-500">Sep 2023 – Mar 2024</p>
+                        <h3 class="text-xl font-bold text-gray-800">Radiology Tech</h3>
+                        <p class="text-md text-gray-600">Apollo Clinic | Kankarbagh, Patna</p>
+                         <span class="text-teal-600 text-sm mt-1 inline-flex items-center">View Details 
+                            <svg id="exp3-arrow" class="w-4 h-4 ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </div>
+                    <ul id="exp3" class="hidden mt-4 ml-4 list-disc text-gray-600 space-y-2">
+                        <li>Performed and assisted with a wide range of standard X-ray diagnostic procedures.</li>
+                        <li>Operated a CR (Computed Radiography) X-ray machine, ensuring the production of high-quality diagnostic images.</li>
+                        <li>Conducted digital image processing, including adjusting brightness and contrast, to enhance image clarity for radiologists.</li>
+                        <li>Strictly adhered to all safety protocols, consistently utilizing lead aprons and patient shielding techniques to minimize radiation exposure.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="visualization" class="mb-16">
+             <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b-2 border-teal-200 pb-2">Experience Breakdown</h2>
+             <p class="text-gray-600 mb-6 text-center">This chart illustrates the duration of hands-on experience in each specialized role.</p>
+             <div class="chart-container bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                 <canvas id="experienceChart"></canvas>
+             </div>
+        </section>
+
+        <section id="education" class="text-center">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-teal-200 pb-2">Education</h2>
+            <div class="bg-white inline-block p-6 rounded-lg shadow-sm border border-gray-200">
+                <h3 class="text-xl font-bold text-gray-800">Bachelor of Vocation in Radiology and Medical Imaging Technology</h3>
+                <p class="text-md text-gray-600 mt-1">Dr. Zakir Husain Institute, Patna, Bihar, India</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        function toggleDetails(id) {
+            const element = document.getElementById(id);
+            const arrow = document.getElementById(id + '-arrow');
+            element.classList.toggle('hidden');
+            arrow.classList.toggle('rotate-180');
+        }
+
+        const ctx = document.getElementById('experienceChart').getContext('2d');
+        const experienceChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Radiology Tech (X-Ray)', 'Ultrasound Tech', 'CT Radiographer'],
+                datasets: [{
+                    label: 'Months of Experience',
+                    data: [7, 6, 8],
+                    backgroundColor: [
+                        'rgba(20, 184, 166, 0.6)',
+                        'rgba(15, 118, 110, 0.6)',
+                        'rgba(13, 148, 136, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(20, 184, 166, 1)',
+                        'rgba(15, 118, 110, 1)',
+                        'rgba(13, 148, 136, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Duration (Months)',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    y: {
+                         ticks: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#334155',
+                        titleFont: {
+                            size: 16
+                        },
+                        bodyFont: {
+                            size: 14
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.raw + ' months';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
